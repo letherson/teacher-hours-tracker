@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
+  <title>Teacher Hours Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#mainContent">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container header-content">
+      <div class="header-text">
+        <h1>Teacher Hours Tracker</h1>
+        <p class="subtitle">Log extra work hours outside the school day.</p>
+      </div>
+
+      <button
+        type="button"
+        id="themeToggle"
+        class="theme-toggle"
+        aria-label="Switch to dark mode"
+        aria-pressed="false"
+      >
+        Dark Mode
+      </button>
+    </div>
+  </header>
+
+  <main id="mainContent" class="container app-shell">
+    <section class="stats-bar" aria-label="Summary totals">
+      <article class="stat-card">
+        <span class="stat-label">Week</span>
+        <strong id="statWeek">0.0</strong>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Month</span>
+        <strong id="statMonth">0.0</strong>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Year</span>
+        <strong id="statYear">0.0</strong>
+      </article>
+    </section>
+
+    <section class="card compact-card info-card" aria-label="Rules">
+      <details>
+        <summary>View logging rules</summary>
+        <ul class="rules-list">
+          <li>Regular teacher day: 7:30 AM–3:30 PM</li>
+          <li>Logging is blocked during that time on active school days</li>
+          <li>Weekends and listed school holidays are allowed</li>
+          <li>Teacher year: Aug. 10, 2026 – June 9, 2027</li>
+        </ul>
+      </details>
+    </section>
+
+    <section class="card form-card" aria-labelledby="logHoursHeading">
+      <div class="section-heading">
+        <h2 id="logHoursHeading">Log Hours</h2>
+        <p class="muted">Enter work completed outside the regular school day.</p>
+      </div>
+
+      <div
+        id="formStatus"
+        class="banner success-banner"
+        role="status"
+        aria-live="polite"
+      ></div>
+
+      <div
+        id="lockoutMessage"
+        class="banner warning-banner"
+        role="alert"
+        aria-live="assertive"
+        tabindex="-1"
+      >
+        Logging is unavailable during the regular school day (7:30 AM–3:30 PM) on active school days.
+      </div>
+
+      <form id="logForm" novalidate>
+        <div class="form-group">
+  <label for="workDate">Work date</label>
+
+  <div class="date-input-wrap">
+    <input
+      id="workDate"
+      name="workDate"
+      type="date"
+      required
+      aria-describedby="workDateHelp workDateError"
+    />
+
+    <span class="date-input-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false">
+        <path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm13 8H4v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8ZM5 6a1 1 0 0 0-1 1v1h16V7a1 1 0 0 0-1-1H5Z"/>
+      </svg>
+    </span>
+  </div>
+
+  <p id="workDateHelp" class="field-note">
+    Regular weekdays during the school year are only allowed if the date is a listed school holiday.
+  </p>
+  <p id="workDateError" class="error-message" aria-live="polite"></p>
+</div>
+
+          <div class="form-group">
+            <label for="timePeriod">Time period</label>
+            <select
+              id="timePeriod"
+              name="timePeriod"
+              required
+              aria-describedby="timePeriodError"
+            >
+              <option value="">Select a time period</option>
+              <option value="before-school">Before School</option>
+              <option value="after-school">After School</option>
+              <option value="evening">Evening</option>
+              <option value="weekend">Weekend</option>
+              <option value="holiday-break">Holiday / Break</option>
+              <option value="summer">Summer</option>
+            </select>
+            <p id="timePeriodError" class="error-message" aria-live="polite"></p>
+          </div>
+
+          <div class="form-group">
+            <label for="activity">Activity</label>
+            <select
+              id="activity"
+              name="activity"
+              required
+              aria-describedby="activityError"
+            >
+              <option value="">Select a category</option>
+              <option value="planning">Planning &amp; Prep</option>
+              <option value="grading">Grading &amp; Assessment</option>
+              <option value="meetings">Meetings</option>
+              <option value="parentContact">Parent Contact</option>
+              <option value="profDev">Professional Development</option>
+              <option value="emails">Emails &amp; Communication</option>
+              <option value="events">Events</option>
+              <option value="afterSchoolActivities">After-School Activities</option>
+            </select>
+            <p id="activityError" class="error-message" aria-live="polite"></p>
+          </div>
+
+          <div class="form-group">
+            <label for="subcategory">Subcategory</label>
+            <select
+              id="subcategory"
+              name="subcategory"
+              aria-describedby="subcategoryHelp"
+            >
+              <option value="">Select if applicable</option>
+            </select>
+            <p id="subcategoryHelp" class="sr-only">
+              This field changes based on the selected activity.
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label for="duration">Hours</label>
+            <input
+              id="duration"
+              name="duration"
+              type="number"
+              min="0.5"
+              max="24"
+              step="0.5"
+              inputmode="decimal"
+              placeholder="1.5"
+              required
+              aria-describedby="durationHelp durationError"
+            />
+            <p id="durationHelp" class="field-note">
+              Enter hours in half-hour increments.
+            </p>
+            <p id="durationError" class="error-message" aria-live="polite"></p>
+          </div>
+
+          <div class="form-group form-group-full">
+            <label for="notes">Notes</label>
+            <textarea
+              id="notes"
+              name="notes"
+              placeholder="What did you work on?"
+              aria-describedby="notesHelp notesError"
+            ></textarea>
+            <p id="notesHelp" class="field-note">
+              Optional. Add a short description of the work completed.
+            </p>
+            <p id="notesError" class="error-message" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button type="submit" id="submitButton" class="button button-primary">
+            Log These Hours
+          </button>
+          <button type="button" id="clearFormButton" class="button button-secondary">
+            Clear Form
+          </button>
+        </div>
+
+        <p class="export-label">Download your data</p>
+
+        <div class="export-actions" aria-label="Export options">
+          <button type="button" id="exportCsvButton" class="button button-primary">
+            Export CSV
+          </button>
+          <button type="button" id="exportJsonButton" class="button button-secondary">
+            Download Backup
+          </button>
+        </div>
+
+        <p class="backup-note">
+          Because this app stores data in the browser on this device, teachers should download a backup regularly in case browser data is cleared.
+        </p>
+      </form>
+    </section>
+
+    <section class="card entries-card" aria-labelledby="entriesHeading">
+      <details class="entries-details">
+        <summary class="entries-summary">
+          <span id="entriesHeading">Recent Entries <span id="entriesCount">(0)</span></span>
+          <span class="entries-summary-note">Tap to view</span>
+        </summary>
+
+        <div class="entries-inner">
+          <div id="entriesList" class="entries-list" aria-live="polite">
+            <p class="empty-state">No entries yet. Log your first hours to get started.</p>
+          </div>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Teacher Hours Tracker</p>
+      <p class="muted">
+        Always follow your district or school contract regarding supplemental-pay documentation.
+      </p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
